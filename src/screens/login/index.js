@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { StatusBar, Platform } from 'react-native';
+import { StatusBar, Platform, Text, ActivityIndicator } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
+
+//api
+import useApi from '../../useApi';
 
 //styled
 import {
@@ -11,16 +16,76 @@ import {
   MenuItemText,
   Input,
   ActionButton,
-  ActionButtonText
+  ActionButtonText,
+  LoadingArea
 } from './styled';
 
-const Login = () => {
+const Login = (props) => {
+
+  //api
+  const api = useApi();
 
   //states
   const [activeMenu, setActiveMenu] = useState('signin');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  //functions
+  const handleSignIn = async () => {
+    //validate
+    if (email && password) {
+      setLoading(true);
+      const response = await api.signin(email, password);
+      console.log(response);
+      setLoading(false);
+
+    if (response.error) {
+      console.log(response.error);
+    } else {
+      //save token on the reducer
+      props.setToken(response.token);
+      //redirect to home page
+        //if has token go to home screen
+        props.navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+              NavigationActions.navigate({
+                  routeName: 'HomeStack'
+              })
+          ]
+      }));
+      }
+    }
+  }
+
+  const handleSignUp = async () => {
+    //validate
+    if (name && email && password) {
+      setLoading(true);
+      const response = await api.signup(name, email, password);
+      console.log(response);
+      setLoading(false);
+
+    if (response.error) {
+      alert(response.error);
+    } else {
+      //save token on the reducer
+      props.setToken(response.token);
+      //redirect to home page
+        //if has token go to home screen
+        props.navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+              NavigationActions.navigate({
+                  routeName: 'HomeStack'
+              })
+          ]
+      }));
+      }
+    }
+  }
 
     return (
       <Container behavior={Platform.OS === 'ios'?'padding':null} >
@@ -40,15 +105,15 @@ const Login = () => {
         {
           //sign in and sign up fields
           activeMenu == 'signup' &&
-            <Input value={name} onChangeText={text=>setName(text)} placeholder="Name" />
+            <Input editable={!loading} value={name} onChangeText={text=>setName(text)} placeholder="Name" />
         }
-        <Input value={email} onChangeText={text=>setEmail(text)} autoCapitalize="none" keyboardType="email-address" placeholder="E-mail" />
-        <Input value={password} onChangeText={text=>setPassword(text)} placeholder="Password" />
+        <Input editable={!loading} value={email} onChangeText={text=>setEmail(text)} autoCapitalize="none" keyboardType="email-address" placeholder="E-mail" />
+        <Input editable={!loading} value={password} onChangeText={text=>setPassword(text)} placeholder="Password" secureTextEntry={true} />
 
         {
           //sign in button
           activeMenu == 'signin' &&
-            <ActionButton>
+            <ActionButton disabled={loading} onPress={handleSignIn}>
               <ActionButtonText>Sign In</ActionButtonText>
             </ActionButton>
         }
@@ -56,13 +121,41 @@ const Login = () => {
         {
           //sign up button
           activeMenu == 'signup' &&
-            <ActionButton>
+            <ActionButton onPress={handleSignUp}>
               <ActionButtonText>Sign Up</ActionButtonText>
             </ActionButton>
+        }
+
+        {/* <Text>token: {props.token}</Text> */}
+
+        {
+          //loading area
+          loading &&
+          <LoadingArea>
+            <ActivityIndicator size="large" color="#FFFFFF" />
+          </LoadingArea>
         }
 
       </Container>
     );
   }
 
-export default Login;
+//redux from reducer
+const mapStateToProps = (state) => {
+  //get token
+  return {
+      token: state.userReducer.token
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setToken:(token)=>dispatch({
+      type: 'SET_TOKEN',
+      payload: {token}
+    })
+  };
+}
+
+//prop
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
