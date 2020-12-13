@@ -1,22 +1,17 @@
 import React from 'react';
-import { SafeAreaView, Text } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
-import { store, persistor } from './src/store';
+//main screen
+import MainStack from './src/navigators/MainStack';
 
-const Test = () => {
-  return (
-    <SafeAreaView>
-      <Text>Test 1,2,3</Text>
-    </SafeAreaView>
-  );
-}
+//store
+import { store, persistor } from './src/store';
 
 export default () => (
   <Provider store={store} >
     <PersistGate loading={null} persistor={persistor} >
-      <Test />
+      <MainStack />
     </PersistGate>
   </Provider>
 )

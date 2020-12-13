@@ -1,5 +1,6 @@
 //Initial User Data
 const initialState = {
+    token: '',
     name: ''
 };
 
