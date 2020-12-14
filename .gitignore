@@ -57,3 +57,7 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# Google API Key
+/ios/MyRide/AppDelegate.m
+/android/app/src/main/AndroidManifest.xml
