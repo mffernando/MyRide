@@ -79,7 +79,7 @@ const Login = (props) => {
           index: 0,
           actions: [
               NavigationActions.navigate({
-                  routeName: 'HomeStack'
+                  routeName: 'HomeDrawer'
               })
           ]
       }));
