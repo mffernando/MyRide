@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { StatusBar } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -9,7 +9,20 @@ import {
 
 const Home = () => {
 
+    //ref
     const map = useRef();
+
+    //state
+    const [mapLocation, setMapLocation] = useState({
+        center: {
+            latitude: 37.78825,
+            longitude: -122.4324
+        },
+        zoom: 16,
+        pitch: 0,
+        altitude: 0,
+        heading: 0
+    });
 
     return (
         <Container>
@@ -18,6 +31,7 @@ const Home = () => {
                 ref={map}
                 style={{flex:1}}
                 provider="google"
+                camera={mapLocation}
             >
             </MapView>
         </Container>
