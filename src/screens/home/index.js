@@ -8,6 +8,9 @@ import MapViewDirections from 'react-native-maps-directions';
 //config Maps Api
 import { MapsApi } from '../../config';
 
+//api
+import useApi from '../../useApi';
+
 //styles
 import {
     Container,
@@ -17,13 +20,20 @@ import {
     ItineraryPoint,
     ItineraryTitle,
     ItineraryValue,
-    ItineraryPlaceHolder
+    ItineraryPlaceHolder,
+    RequestDetails,
+    RequestDetail,
+    RequestTitle,
+    RequestValue
 } from './styled';
 
 const Home = () => {
 
     //ref
     const map = useRef();
+
+    //api
+    const api = useApi();
 
     //state
     const [mapLocation, setMapLocation] = useState({
@@ -40,6 +50,9 @@ const Home = () => {
     const [fromLocation, setFromLocation] = useState({});
     const [toLocation, setToLocation] = useState({});
     const [showDirections, setShowDirections] = useState(false);
+    const [requestDistance, setRequestDistance] = useState(0);
+    const [requestTime, setRequestTime] = useState(0);
+    const [requestPrice, setRequestPrice] = useState(0);
 
     //initialize / effect
     useEffect(()=> {
@@ -116,8 +129,18 @@ const Home = () => {
     }
 
     //update zoom
-    const handleDirectionsReady = (response) => {
-        //zoom
+    const handleDirectionsReady = async (response) => {
+        //distance
+        setRequestDistance(response.distance);
+        //duration
+        setRequestTime(response.duration);
+        //price
+        const priceRequest = await api.getRequestPrice(response.distance);
+        if (!priceRequest.error) {
+            setRequestPrice(priceRequest.price); 
+        }
+        
+        //map zoom
         map.current.fitToCoordinates(response.coordinates, {
             edgePadding: {
                 left: 50,
@@ -125,7 +148,7 @@ const Home = () => {
                 bottom: 50,
                 top: 800
             }
-        })
+        });
         console.log(response);
     }
 
@@ -199,6 +222,24 @@ const Home = () => {
                     </>
                 </ItineraryItem>
             </ItineraryArea>
+            <ItineraryItem>
+                <>
+                    <RequestDetails>
+                        <RequestDetail>
+                            <RequestTitle>Distance</RequestTitle>
+                            <RequestValue>{ requestDistance > 0?`${requestDistance.toFixed(1)} km`:'km' }</RequestValue>
+                        </RequestDetail>
+                        <RequestDetail>
+                            <RequestTitle>Time</RequestTitle>
+                            <RequestValue>{ requestTime > 0?`${requestTime.toFixed(0)} min`:'min' }</RequestValue>
+                        </RequestDetail>
+                        <RequestDetail>
+                            <RequestTitle>Value</RequestTitle>
+                            <RequestValue>{ requestPrice > 0?`R$ ${requestPrice.toFixed(2)}`:'R$' }</RequestValue>
+                        </RequestDetail>
+                    </RequestDetails>
+                </>
+            </ItineraryItem>
         </Container>
     )
 }

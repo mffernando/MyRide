@@ -49,3 +49,23 @@ export const ItineraryPlaceHolder = styled.Text`
     font-size: 16px;
     text-align: center;
 `;
+
+export const RequestDetails = styled.View`
+    flex-direction: row;
+`;
+
+export const RequestDetail = styled.View`
+    flex: 1;
+    align-items: center;
+`;
+
+export const RequestTitle = styled.Text`
+    color: #e79e4f;
+    font-weight: bold;
+    font-size: 14px;
+`;
+
+export const RequestValue = styled.Text`
+    color: #734046;
+    font-size: 14px;
+`;

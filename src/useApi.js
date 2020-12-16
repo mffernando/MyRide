@@ -27,5 +27,21 @@ export default () => ({
                 resolve(json);
             }, 1000)
         });
-    }
+    },
+
+//calculate ride price
+getRequestPrice:(distance) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() =>{
+            let json = {
+                error:''
+            };
+            //calculate fake price
+            json.price = distance * 7;
+            resolve(json);
+        }, 1000)
+    });
+},
+
 });
+
