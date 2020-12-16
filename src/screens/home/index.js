@@ -24,7 +24,10 @@ import {
     RequestDetails,
     RequestDetail,
     RequestTitle,
-    RequestValue
+    RequestValue,
+    RequestButtons,
+    RequestButton,
+    RequestButtonText
 } from './styled';
 
 const Home = () => {
@@ -222,24 +225,36 @@ const Home = () => {
                     </>
                 </ItineraryItem>
             </ItineraryArea>
-            <ItineraryItem>
-                <>
-                    <RequestDetails>
-                        <RequestDetail>
-                            <RequestTitle>Distance</RequestTitle>
-                            <RequestValue>{ requestDistance > 0?`${requestDistance.toFixed(1)} km`:'km' }</RequestValue>
-                        </RequestDetail>
-                        <RequestDetail>
-                            <RequestTitle>Time</RequestTitle>
-                            <RequestValue>{ requestTime > 0?`${requestTime.toFixed(0)} min`:'min' }</RequestValue>
-                        </RequestDetail>
-                        <RequestDetail>
-                            <RequestTitle>Value</RequestTitle>
-                            <RequestValue>{ requestPrice > 0?`R$ ${requestPrice.toFixed(2)}`:'R$' }</RequestValue>
-                        </RequestDetail>
-                    </RequestDetails>
-                </>
-            </ItineraryItem>
+            {
+                //if has "from - to" location show"
+                fromLocation.center && toLocation.center &&
+                    <ItineraryItem>
+                        <>
+                            <RequestDetails>
+                                <RequestDetail>
+                                    <RequestTitle>Distance</RequestTitle>
+                                    <RequestValue>{ requestDistance > 0?`${requestDistance.toFixed(1)} km`:'km' }</RequestValue>
+                                </RequestDetail>
+                                <RequestDetail>
+                                    <RequestTitle>Time</RequestTitle>
+                                    <RequestValue>{ requestTime > 0?`${requestTime.toFixed(0)} min`:'min' }</RequestValue>
+                                </RequestDetail>
+                                <RequestDetail>
+                                    <RequestTitle>Value</RequestTitle>
+                                    <RequestValue>{ requestPrice > 0?`R$ ${requestPrice.toFixed(2)}`:'R$' }</RequestValue>
+                                </RequestDetail>
+                            </RequestDetails>
+                            <RequestButtons>
+                                <RequestButton color="#00FF00">
+                                    <RequestButtonText>Request Driver</RequestButtonText>
+                                </RequestButton>
+                                <RequestButton color="#FF0000">
+                                    <RequestButtonText>Cancel</RequestButtonText>
+                                </RequestButton>
+                            </RequestButtons>
+                        </>
+                    </ItineraryItem>
+            }
         </Container>
     )
 }

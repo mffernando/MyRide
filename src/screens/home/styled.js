@@ -69,3 +69,19 @@ export const RequestValue = styled.Text`
     color: #734046;
     font-size: 14px;
 `;
+
+export const RequestButtons = styled.View`
+    flex-direction: row;
+`;
+
+export const RequestButton = styled.TouchableHighlight`
+    flex: 1;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: ${props=>props.color};
+    margin: 10px 5px;
+`;
+
+export const RequestButtonText = styled.Text``;
