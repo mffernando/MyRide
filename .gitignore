@@ -61,3 +61,4 @@ buck-out/
 # Google API Key
 /ios/MyRide/AppDelegate.m
 /android/app/src/main/AndroidManifest.xml
+/src/config.js
