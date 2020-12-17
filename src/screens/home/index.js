@@ -149,10 +149,32 @@ const Home = () => {
                 left: 50,
                 right: 50,
                 bottom: 50,
-                top: 800
+                top: 850
             }
         });
         console.log(response);
+    }
+
+    //request cancel
+    const handleRequestCancel = () => {
+        //reset location and values
+        setToLocation({});
+        setShowDirections(false);
+        setRequestDistance(0);
+        setRequestTime(0)
+        setRequestPrice(0);
+        setMapLocation(fromLocation); //reset origin
+    }
+
+    const handleRequestDriver = () => {
+
+    }
+
+    //reset map when change
+    const handleMapChange = async () => {
+        const mapCamera = await map.current.getCamera();
+        mapCamera.altitude = 0;
+        setMapLocation(mapCamera);
     }
 
     return (
@@ -163,6 +185,7 @@ const Home = () => {
                 style={{flex:1}}
                 provider="google"
                 camera={mapLocation}
+                onRegionChangeComplete={handleMapChange}
             >
                 {
                     //set origin pin location
@@ -245,10 +268,10 @@ const Home = () => {
                                 </RequestDetail>
                             </RequestDetails>
                             <RequestButtons>
-                                <RequestButton color="#00FF00">
+                                <RequestButton color="#00CC00" onPress={handleRequestDriver}>
                                     <RequestButtonText>Request Driver</RequestButtonText>
                                 </RequestButton>
-                                <RequestButton color="#FF0000">
+                                <RequestButton color="#CC0000" onPress={handleRequestCancel}>
                                     <RequestButtonText>Cancel</RequestButtonText>
                                 </RequestButton>
                             </RequestButtons>
