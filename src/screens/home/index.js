@@ -33,7 +33,7 @@ import {
 
 //modal
 import AddressModal from '../../components/AddressModal';
-import { useLinkProps } from '@react-navigation/native';
+import DriverModal from '../../components/DriverModal';
 
 const Home = () => {
 
@@ -64,6 +64,8 @@ const Home = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalField, setModalField] = useState('');
     const [loading, setLoading] = useState(false);
+    const [driverInfo, setDriverInfo] = useState({});
+    const [driverModalVisible, setDriverModalVisible] = useState(false);
 
     //initialize / effect
     useEffect(()=> {
@@ -184,6 +186,11 @@ const Home = () => {
 
         if (!driver.error) {
             //find driver
+            setDriverInfo(driver.driver);
+            setDriverModalVisible(true);
+
+            //cancel button reset
+            handleRequestCancel();
         } else {
             //not find
             alert(driver.error);
@@ -229,6 +236,11 @@ const Home = () => {
     return (
         <Container>
             <StatusBar barStyle="light-content" backgroundColor="#734046" />
+            <DriverModal 
+                driver={driverInfo}
+                visible={driverModalVisible}
+                visibleAction={setDriverModalVisible}
+            />
             <AddressModal 
                 title={modalTitle}
                 visible={modalVisible}

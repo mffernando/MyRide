@@ -53,16 +53,29 @@ findDriver:(options) => {
             //json.error = 'No Driver Found!';
             json.driver = {
                 name: 'Fake Driver',
+                avatar: 'https://cdn.icon-icons.com/icons2/1879/PNG/512/iconfinder-7-avatar-2754582_120519.png',
                 stars: 5,
                 carName: 'Bugatti Veyron',
                 carColor: 'Black',
                 carPlate: 'AAA-0000'
-            }
+            };
 
             resolve(json);
         }, 3000)
     });
-}
+},
+
+//fake rating
+setRating:(rating) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() =>{
+            let json = {
+                error:''
+            };
+            resolve(json);
+        }, 1000)
+    });
+},
 
 });
 
