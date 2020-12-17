@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-native';
 import styled from 'styled-components/native';
+import Geocoder from 'react-native-geocoding';
+
+//config Maps Api
+import { MapsApi } from '../config';
 
 //styles
 const ModalArea = styled.View`
@@ -24,20 +28,47 @@ const ModalClose = styled.TouchableHighlight`
 
 const ModalCloseText = styled.Text``;
 
-const ModalTitle = styled.Text`
+const ModalInput = styled.TextInput`
     margin-left: 20px;
     font-size: 18px;
-    font-weight: bold;
     color: #734046;
 `;
 
+const ModalResults = styled.View``;
+
+const ModalResult = styled.TouchableHighlight`
+    padding: 20px;
+`;
+
+const ModalResultText = styled.Text`
+    color: #734046;
+    font-size: 16px;
+`;
+
 export default (props) => {
+
+    //state
+    const [results, setResults] = useState([]);
+    const [searchText, setSearchText] = useState('');
+
+    //effect monitoring geocodade change
+    useEffect(()=>{
+        Geocoder.init(MapsApi, {language:'pt-br'});
+    }, []);
+
+    //effec monitoring text change
+    useEffect(()=>{
+        if (searchText) {
+            //search
+        }
+    }, [searchText]);
+
 
     //functions
     const handleCloseAction = () => {
         props.visibleAction(false);
     }
-    
+
         return (
             <Modal
                 animationType="slide"
@@ -49,8 +80,22 @@ export default (props) => {
                         <ModalClose onPress={handleCloseAction} underlayColor="#EE0000" >
                             <ModalCloseText>X</ModalCloseText>
                         </ModalClose>
-                        <ModalTitle>{ props.title }</ModalTitle>
+                        <ModalInput value={searchText} onChangeText={text=>setSearchText(text)} autoFocus={true} placeholder={props.title} placeholderTextColor="#734046" />
                     </ModalHeader>
+                    <ModalResults>
+                        {
+                            //show results array
+                            results.map((item, key)=>(
+                                <ModalResult key={key} >
+                                    <ModalResultText>{item.address}</ModalResultText>
+                                </ModalResult>
+                            ))
+                        }
+
+                        <ModalResult>
+                            <ModalResultText>Origin</ModalResultText>
+                        </ModalResult>
+                    </ModalResults>
                 </ModalArea>
             </Modal>
         );
