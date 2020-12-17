@@ -43,5 +43,26 @@ getRequestPrice:(distance) => {
     });
 },
 
+findDriver:(options) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() =>{
+            let json = {
+                error:''
+            };
+            //find fake driver
+            //json.error = 'No Driver Found!';
+            json.driver = {
+                name: 'Fake Driver',
+                stars: 5,
+                carName: 'Bugatti Veyron',
+                carColor: 'Black',
+                carPlate: 'AAA-0000'
+            }
+
+            resolve(json);
+        }, 3000)
+    });
+}
+
 });
 

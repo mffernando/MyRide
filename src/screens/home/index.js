@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import { ActivityIndicator, StatusBar } from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
@@ -27,7 +27,8 @@ import {
     RequestValue,
     RequestButtons,
     RequestButton,
-    RequestButtonText
+    RequestButtonText,
+    LoadingArea
 } from './styled';
 
 //modal
@@ -62,6 +63,7 @@ const Home = () => {
     const [modalTitle, setModalTitle] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [modalField, setModalField] = useState('');
+    const [loading, setLoading] = useState(false);
 
     //initialize / effect
     useEffect(()=> {
@@ -148,8 +150,8 @@ const Home = () => {
         //map zoom
         map.current.fitToCoordinates(response.coordinates, {
             edgePadding: {
-                left: 10,
-                right: 10,
+                left: 25,
+                right: 25,
                 bottom: 0,
                 top: 900
             }
@@ -168,7 +170,24 @@ const Home = () => {
         setMapLocation(fromLocation); //reset origin
     }
 
-    const handleRequestDriver = () => {
+    const handleRequestDriver = async () => {
+        //loading
+        setLoading(true);
+        //find driver
+        const driver = await api.findDriver({
+            fromLatitude: fromLocation.center.latitude,
+            fromLongitue: fromLocation.center.longitude,
+            toLatitude: toLocation.center.latitude,
+            toLongitude: toLocation.center.longitude
+        });
+        setLoading(false);
+
+        if (!driver.error) {
+            //find driver
+        } else {
+            //not find
+            alert(driver.error);
+        }
 
     }
 
@@ -314,6 +333,13 @@ const Home = () => {
                             </RequestButtons>
                         </>
                     </ItineraryItem>
+            }
+            {
+                //loading
+                loading &&
+                    <LoadingArea>
+                        <ActivityIndicator size="large" color="#FFFFFF" />
+                    </LoadingArea>
             }
         </Container>
     )
