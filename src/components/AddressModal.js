@@ -45,6 +45,8 @@ const ModalResultText = styled.Text`
     font-size: 16px;
 `;
 
+let timer;
+
 export default (props) => {
 
     //state
@@ -59,14 +61,54 @@ export default (props) => {
     //effec monitoring text change
     useEffect(()=>{
         if (searchText) {
-            //search
+            //search timer
+            if (timer) {
+                clearTimeout(timer);
+            }
+            timer = setTimeout(async ()=>{
+                //wait one second to search
+                console.log("searching...");
+                const geo = await Geocoder.from(searchText);
+                console.log("Results: ", geo.results.length);
+                //if find
+                if (geo.results.length > 0) {
+
+                    let tempResults = [];
+
+                    for (let i in geo.results) { 
+                        tempResults.push({
+                            address: geo.results[i].formatted_address,
+                            latitude: geo.results[i].geometry.location.lat,
+                            longitude: geo.results[i].geometry.location.lng
+                        });
+                    }
+                    setResults(tempResults);
+                } else {
+                    //reset results
+                    setResults([]);
+                }
+            }, 1000) //1000 = 1 sec
         }
     }, [searchText]);
 
 
     //functions
     const handleCloseAction = () => {
+        //close and reset search
         props.visibleAction(false);
+        setResults([]);
+        setSearchText('');
+    }
+
+    const handleResultClick = (item) => {
+        props.clickAction(props.field, item); //select item
+        props.visibleAction(false); //close modal
+    }
+
+    //reset search
+    const handleClose = () => {
+        setResults([]);
+        setSearchText('');
     }
 
         return (
@@ -74,6 +116,7 @@ export default (props) => {
                 animationType="slide"
                 transparent={false}
                 visible={props.visible}
+                onShow={handleClose}
             >
                 <ModalArea>
                     <ModalHeader>
@@ -86,15 +129,11 @@ export default (props) => {
                         {
                             //show results array
                             results.map((item, key)=>(
-                                <ModalResult key={key} >
+                                <ModalResult key={key} onPress={()=>handleResultClick(item)} >
                                     <ModalResultText>{item.address}</ModalResultText>
                                 </ModalResult>
                             ))
                         }
-
-                        <ModalResult>
-                            <ModalResultText>Origin</ModalResultText>
-                        </ModalResult>
                     </ModalResults>
                 </ModalArea>
             </Modal>

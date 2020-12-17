@@ -32,6 +32,7 @@ import {
 
 //modal
 import AddressModal from '../../components/AddressModal';
+import { useLinkProps } from '@react-navigation/native';
 
 const Home = () => {
 
@@ -60,6 +61,7 @@ const Home = () => {
     const [requestPrice, setRequestPrice] = useState(0);
     const [modalTitle, setModalTitle] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalField, setModalField] = useState('');
 
     //initialize / effect
     useEffect(()=> {
@@ -74,6 +76,14 @@ const Home = () => {
             setShowDirections(true);
         }
     }, [toLocation]);
+
+    //monitoring when from location change
+    useEffect(()=>{
+        //if exists
+        if (fromLocation.center) {
+            setMapLocation(fromLocation);
+        }
+    }, [fromLocation]);
 
     //get user position
     const getMyCurrentPosition = () => {
@@ -112,29 +122,15 @@ const Home = () => {
     const handleFromClick = () => {
         //open modal
         setModalTitle("Origin");
+        setModalField('from');
         setModalVisible(true);
     }
 
     //get destination
     const handleToClick = async () => {
-        const geo = await Geocoder.from('Curitiba, PR');
-        //if find
-        if (geo.results.length > 0) {
-            const location = {
-                //first location name result
-                name: geo.results[0].formatted_address,
-                center: {
-                    latitude: geo.results[0].geometry.location.lat,
-                    longitude: geo.results[0].geometry.location.lng
-                },
-                zoom: 16,
-                pitch: 0,
-                altitude: 0,
-                heading: 0
-            };
-            //set location
-            setToLocation(location);
-        }
+        setModalTitle("Destiny");
+        setModalField('to');
+        setModalVisible(true);
     }
 
     //update zoom
@@ -152,10 +148,10 @@ const Home = () => {
         //map zoom
         map.current.fitToCoordinates(response.coordinates, {
             edgePadding: {
-                left: 50,
-                right: 50,
-                bottom: 50,
-                top: 850
+                left: 10,
+                right: 10,
+                bottom: 0,
+                top: 900
             }
         });
         console.log(response);
@@ -183,6 +179,34 @@ const Home = () => {
         setMapLocation(mapCamera);
     }
 
+    const handleModalClick = (field, address) => {
+        console.log("Field: ", field);
+        console.log("Address: ", address);
+
+        const location = {
+            //first location name result
+            name: address.address,
+            center: {
+                latitude: address.latitude,
+                longitude: address.longitude
+            },
+            zoom: 16,
+            pitch: 0,
+            altitude: 0,
+            heading: 0
+        };
+
+        switch (field) {
+            case 'from':
+                setFromLocation(location);  
+            break;
+            case 'to':
+                setToLocation(location);  
+            break;
+        }
+
+    }
+
     return (
         <Container>
             <StatusBar barStyle="light-content" backgroundColor="#734046" />
@@ -190,6 +214,8 @@ const Home = () => {
                 title={modalTitle}
                 visible={modalVisible}
                 visibleAction={setModalVisible}
+                field={modalField}
+                clickAction={handleModalClick}
             />
             <MapView
                 ref={map}
