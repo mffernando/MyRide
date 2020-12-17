@@ -30,6 +30,9 @@ import {
     RequestButtonText
 } from './styled';
 
+//modal
+import AddressModal from '../../components/AddressModal';
+
 const Home = () => {
 
     //ref
@@ -49,13 +52,14 @@ const Home = () => {
         altitude: 0,
         heading: 0
     });
-
     const [fromLocation, setFromLocation] = useState({});
     const [toLocation, setToLocation] = useState({});
     const [showDirections, setShowDirections] = useState(false);
     const [requestDistance, setRequestDistance] = useState(0);
     const [requestTime, setRequestTime] = useState(0);
     const [requestPrice, setRequestPrice] = useState(0);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     //initialize / effect
     useEffect(()=> {
@@ -106,7 +110,9 @@ const Home = () => {
 
     //functions
     const handleFromClick = () => {
-
+        //open modal
+        setModalTitle("Origin");
+        setModalVisible(true);
     }
 
     //get destination
@@ -180,6 +186,11 @@ const Home = () => {
     return (
         <Container>
             <StatusBar barStyle="light-content" backgroundColor="#734046" />
+            <AddressModal 
+                title={modalTitle}
+                visible={modalVisible}
+                visibleAction={setModalVisible}
+            />
             <MapView
                 ref={map}
                 style={{flex:1}}
