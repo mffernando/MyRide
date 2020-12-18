@@ -154,10 +154,10 @@ const Home = (props) => {
         //map zoom
         map.current.fitToCoordinates(response.coordinates, {
             edgePadding: {
-                left: 25,
-                right: 25,
-                bottom: 0,
-                top: 900
+                left: 10,
+                right: 10,
+                bottom: 10,
+                top: 1200
             }
         });
         console.log(response);

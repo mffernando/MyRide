@@ -38,7 +38,7 @@ const Login = (props) => {
     if (email && password) {
       setLoading(true);
       const response = await api.signin(email, password);
-      console.log(response);
+      //console.log(response);
       setLoading(false);
 
     if (response.error) {
@@ -46,13 +46,14 @@ const Login = (props) => {
     } else {
       //save token on the reducer
       props.setToken(response.token);
+      props.setName(response.name);
       //redirect to home page
         //if has token go to home screen
         props.navigation.dispatch(StackActions.reset({
           index: 0,
           actions: [
               NavigationActions.navigate({
-                  routeName: 'HomeStack'
+                  routeName: 'HomeDrawer'
               })
           ]
       }));
@@ -153,6 +154,10 @@ const mapDispatchToProps = (dispatch) => {
     setToken:(token)=>dispatch({
       type: 'SET_TOKEN',
       payload: {token}
+    }),
+    setName:(name)=>dispatch({
+      type: 'SET_NAME',
+      payload: {name}
     })
   };
 }

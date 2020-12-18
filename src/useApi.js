@@ -5,7 +5,8 @@ export default () => ({
             setTimeout(() =>{
                 let json = {
                     error:'',
-                    token:'123'
+                    token:'123',
+                    name:'My Name',
                 };
                 resolve(json);
             }, 1000)
@@ -23,6 +24,7 @@ export default () => ({
                     json.error = "E-mail already registered!";
                 } else {
                     json.token = '123';
+                    json.name= 'My Name';
                 }
                 resolve(json);
             }, 1000)
