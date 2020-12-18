@@ -28,14 +28,16 @@ import {
     RequestButtons,
     RequestButton,
     RequestButtonText,
-    LoadingArea
+    LoadingArea,
+    MenuArea,
+    MenuImage
 } from './styled';
 
 //modal
 import AddressModal from '../../components/AddressModal';
 import DriverModal from '../../components/DriverModal';
 
-const Home = () => {
+const Home = (props) => {
 
     //ref
     const map = useRef();
@@ -233,6 +235,11 @@ const Home = () => {
 
     }
 
+    //open drawer menu
+    const handleMenu = () => {
+        props.navigation.openDrawer();
+    }
+
     return (
         <Container>
             <StatusBar barStyle="light-content" backgroundColor="#734046" />
@@ -278,6 +285,9 @@ const Home = () => {
                     />
                 }
             </MapView>
+            <MenuArea onPress={handleMenu} underlayColor="transparent" >
+                <MenuImage source={require('../../assets/menu.png')} />
+            </MenuArea>
             <ItineraryArea>
                 <ItineraryItem onPress={handleFromClick} underlayColor="#A05344" >
                     <>

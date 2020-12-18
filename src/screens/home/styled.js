@@ -8,7 +8,7 @@ export const ItineraryArea = styled.View`
     position: absolute;
     left: 10px;
     right: 10px;
-    top: 50px;
+    top: 60px;
     background-color: #734046;
     border-radius: 5px;
     border-color: #e79e4f;
@@ -95,4 +95,19 @@ export const LoadingArea = styled.View`
     background-color: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
+`;
+
+export const MenuArea = styled.TouchableHighlight`
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const MenuImage = styled.Image`
+    width: 24px;
+    height: 24px;
 `;
